@@ -1,0 +1,4 @@
+.DS_Store
+dist
+pyproject.toml
+rutifu.egg-info
