@@ -70,18 +70,25 @@ def block():
     while True:
         time.sleep(1)
 # Wait until the network is available
-def waitForDns(host):
+def waitForNetwork(host):
+    networkUp = False
     wasWaiting = False
-    while True:
+    while not networkUp:
         try:
             hostAddr = socket.gethostbyname(host)
-            if wasWaiting:
-                log("DNS is up")
-            return
-        except:
-            log("Waiting for DNS")
-            wasWaiting = True
-            time.sleep(1)
+            status = os.system("ping "+hostAddr+" -c1")
+            if status == 0:
+                networkUp = True
+                break
+            else:
+                log("Waiting for network", status)
+        except Exception as ex:
+            log("Waiting for network", str(ex))
+        wasWaiting = True
+        time.sleep(1)
+    if wasWaiting:
+        log("Network is up")
+    return
 
 ################################################################################
 # Manipulation of strings and lists
